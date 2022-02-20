@@ -6,9 +6,11 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import ru.zavrichko.config.Credentials;
 import ru.zavrichko.helpers.Attach;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static java.lang.String.format;
 
 public class TestBase {
     @BeforeAll
@@ -17,10 +19,12 @@ public class TestBase {
 
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.browserSize = "1920x1080";
-        String login = System.getProperty("login");
-        String password = System.getProperty("password");
+
+        String user = Credentials.config.user();
+        String password = Credentials.config.password();
         String url = System.getProperty("url");
-        String remoteUrl = "https://" + login + ":" + password + "@" + url;
+        String remoteUrl = format("https://%s:%s@%s", user, password, url);
+
         Configuration.remote = remoteUrl;
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("enableVNC", true);
